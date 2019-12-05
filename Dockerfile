@@ -11,7 +11,10 @@ RUN export uid=1000 gid=1000 && \
     echo "oliner ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/oliner && \
     chmod 0440 /etc/sudoers.d/oliner && \
     chown ${uid}:${gid} -R /home/oliner && \
-    apt-get update && \
+    apt-get -y update && \
+    apt-get install -y --no-install-recommends software-properties-common && \
+    add-apt-repository ppa:git-core/ppa && \
+    apt-get -y update && \
     apt-get -y --no-install-recommends upgrade && \
     # install a whole lot of dependencies
     apt-get install -y --no-install-recommends git curl wget sudo libgl1-mesa-glx \
