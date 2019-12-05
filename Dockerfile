@@ -11,21 +11,21 @@ RUN export uid=1000 gid=1000 && \
     echo "oliner ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/oliner && \
     chmod 0440 /etc/sudoers.d/oliner && \
     chown ${uid}:${gid} -R /home/oliner && \
+    # install the latest version of Git
     apt-get -y update && \
-    apt-get install -y --no-install-recommends software-properties-common && \
+    apt-get install -y --no-install-recommends software-properties-common curl && \
     add-apt-repository ppa:git-core/ppa && \
+    # install VS Code
+    curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg && \
+    install -o root -g root -m 644 packages.microsoft.gpg /usr/share/keyrings/ && \
+    sh -c 'echo "deb [arch=amd64 signed-by=/usr/share/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list' && \
     apt-get -y update && \
-    apt-get -y --no-install-recommends upgrade && \
+    apt-get -y --no-install-recommends dist-upgrade && \
     # install a whole lot of dependencies
-    apt-get install -y --no-install-recommends git curl wget sudo libgl1-mesa-glx \
-    libgl1-mesa-dri mesa-utils unzip inetutils-ping bison flex build-essential g++ \
-    libfl-dev libxrender1 libxtst6 libxi6 autoconf gperf tcl-dev tk-dev libgtk2.0-dev \
-    software-properties-common ros-melodic-mavros* ros-melodic-joy ros-melodic-rosserial \
-    ros-melodic-rosserial-arduino python-pip python-dev build-essential vim && \
+    apt-get install -y --no-install-recommends build-essential git libgtk-3-dev vim \
+    pkg-config libavcodec-dev libavformat-dev libswscale-dev libtbb2 libtbb-dev sudo \
+    ros-melodic-rosserial ros-melodic-rosserial-arduino apt-transport-https code python-pip && \
     pip install --upgrade python pip virtualenv && \
-    # Install VS Code
-    curl -L "https://go.microsoft.com/fwlink/?LinkID=760868" -o /tmp/code.deb && \
-    apt-get -y --no-install-recommends install /tmp/code.deb && \
     # clean up temp files and caches
     apt-get -y autoremove && \
     apt-get -y clean && \
