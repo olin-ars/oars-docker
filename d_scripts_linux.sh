@@ -2,9 +2,9 @@
 
 function useoars() {
 	if [ -z $(docker ps -a --format "{{.Names}}" | grep "oars") ]; then
-        	.dockin -s 1 -n oars -i olinaquabots/base-setup:2019-2020 -v "oars-research"
+        	dockin -s 1 -n oars -i olinaquabots/base-setup:latest -v "oars-research"
 	else
-		.dockin -s 2 -n oars
+		dockin -s 2 -n oars
 	fi
 }
 
